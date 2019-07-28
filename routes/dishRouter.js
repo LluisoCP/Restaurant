@@ -77,6 +77,7 @@ dishRouter.route('/:dishId')
             res.setHeader('Content-Type', 'application/json');
             res.json(dish);
         }, (err) => next(err))
+        .catch((err) => next(err));
     });
 
 /* All dish' comments verb operations */
