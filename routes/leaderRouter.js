@@ -71,7 +71,7 @@ leaderRouter.route('/:leaderId')
     })
     .delete((req, res, next) => {
         Leaders.findByIdAndRemove(req.params.leaderId)
-        .then((dish) => {
+        .then((leader) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(leader);
