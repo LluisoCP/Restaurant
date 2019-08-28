@@ -6,7 +6,8 @@ var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 let passport = require('passport');
-let authenticate = require('./authenticate');
+let authenticate = require('./authenticate'); //Això no està sense utilitzar al vídeo
+let config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -19,7 +20,7 @@ const mongoose = require('mongoose');
 
 const Dishes = require('./models/dishes');
 
-const url = 'mongodb://localhost:27018/conFusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
@@ -39,36 +40,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser('123312-abccab-xyz'));
 
-app.use(session({
-  name: 'session-id',
-  secret: '123312-abccab-xyz',
-  saveUninitialized: false,
-  resave: false,
-  store: new FileStore()
-}));
-
 app.use(passport.initialize());
-app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-function auth(req, res, next) {
-  // console.log(req.headers);
-  // console.log(req.session);
-
-  if (!req.user) {
-    let err = new Error('You are not authenticated.')
-    err.status = 403;
-    return next(err);
-  
-  } else {
-      next();
-  }
-
-}
-
-app.use(auth);
+app.use('/', indexRouter); // Això està diferent al vídeo
+app.use('/users', usersRouter); // Això està diferent al vídeo
 
 app.use(express.static(path.join(__dirname, 'public')));
 
